@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactConfirmAlert, { confirmAlert } from 'react-confirm-alert'; // Import 
-import 'react-confirm-alert/src/react-confirm-alert.css'
+import ReactConfirmAlert, { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import getContactList from './service/contacts/index';
 import Wrapper from './components/containers/modal';
 import uuidV1 from 'uuid/v1';
@@ -29,8 +29,6 @@ class App extends React.Component {
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
-    this.handleOnEdit = this.handleOnEdit.bind(this);
-    this.handlePhoneEdit = this.handlePhoneEdit.bind(this);
     this.handleFilter = this.handleFilter.bind(this);
 
 
@@ -58,6 +56,8 @@ class App extends React.Component {
     console.log('handleonchange called');
     this.setState({
       [event.target.name]: event.target.value
+    }, () => {
+      console.log(this.state)
     });
   }
 
@@ -68,13 +68,7 @@ class App extends React.Component {
     })
   }
 
-  handleOnEdit(event) {
-    console.log('handleonedit called')
-    console.log(event.target.value)
-  }
-  handlePhoneEdit() {
-    console.log('handlePhone edit called')
-  }
+  
   //closes overlay wrapper
   handleCloseModal() {
     const { addContactModal, editContactModal } = this.state;
@@ -118,7 +112,6 @@ class App extends React.Component {
 
   //displays modal to allow modification of contact info
   handleEdit() {
-    console.log('handleedit called')
     this.setState({
       edit: true,
       editContactModal: true
@@ -147,25 +140,33 @@ class App extends React.Component {
   }
 
   //updates contact information after editing
-  handleUpdate(contact) {
-    console.log('contact to update', contact);
-    // const { firstName, lastName, phone, email, title, province, streetAddress, zipCode, picture, city } = this.state;
+  handleUpdate( event ) {
+    event.preventDefault();
+    const {person} = this.state;
+    const { id } = person;
+    let editedContact = {id};
+    //TODO turn this mess into a function or loop .
+    (this.state.firstName ? editedContact.firstName=this.state.firstName : editedContact.firstName = person.firstName);
+    (this.state.lastName ? editedContact.lastName=this.state.lastName : editedContact.lastName = person.lastName);
+    (this.state.email ? editedContact.email=this.state.email: editedContact.email = person.email);
+    (this.state.phone ? editedContact.phone=this.state.phone : editedContact.phone = person.phone);
+    (this.state.title ? editedContact.title=this.state.title : editedContact.title = person.title);
+    (this.state.province ? editedContact.province=this.state.province : editedContact.province = person.province);
+    (this.state.streetAddress ? editedContact.streetAddress=this.state.streetAddress : editedContact.streetAddress = person.streetAddress);
+    (this.state.zipCode ? editedContact.zipCode=this.state.zipCode : editedContact.zipCode = person.zipCode);
+    (this.state.city ? editedContact.city=this.state.city : editedContact.city = person.city);    
+    (this.state.picture ? editedContact.picture=this.state.picture : editedContact.picture = person.picture);
 
-    // const editedContact = {
-    //   id: contact.id,
-    //   firstName, lastName, phone, email, title, province, streetAddress, zipCode, picture, city
-    // }
-    // const { contactList } = this.state;
-    // let list = contactList.filter((obj) => {
-    //   return obj.id !== contact.id
-    // })
-    // list.concat(editedContact);
-    // console.log('new list should be', list);
-    //  this.setState({
-    //    contactList: list
-    //  }, () => {
-    //    console.log('new contact list', contactList);
-    //  })
+    const { contactList } = this.state;
+    let list = contactList.filter((obj) => {
+      return obj.id !== person.id
+    })
+    list.push(editedContact);
+     this.setState({
+       contactList: list,
+       person: editedContact,
+       editContactModal: false
+     });
 
   }
 
@@ -180,10 +181,9 @@ class App extends React.Component {
   handleFilter(event) {
     this.setState({
       filter: event.target.value
-    })
-    // state.form[event.target.name] = event.target.value;
-    // this.setState(state);
+    });
   }
+
   getFilteredContacts() {
     let filteredContacts = this.state.contactList;
     filteredContacts.sort((a, b) => {
@@ -267,7 +267,7 @@ class App extends React.Component {
   //renders edit view to modify contact
   renderEditView() {
     const { person, edit, editContactModal } = this.state;
-    console.log('person', person);
+
     if (person && edit) {
       return (
         <Wrapper
@@ -276,8 +276,8 @@ class App extends React.Component {
           title='Edit contact'>
           <ContactEditView
             onSubmit={this.handleUpdate}
-            onPhoneChange={this.handlePhoneEdit}
-            onChange={this.handleOnEdit}
+            onPhoneChange={this.handlePhoneChange}
+            onChange={this.handleOnChange}
             contactFile={person} />
         </Wrapper>
       )
