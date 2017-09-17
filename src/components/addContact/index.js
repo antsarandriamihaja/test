@@ -1,25 +1,24 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import ContactForm from './newContactForm';
+import ContactForm from '../addContact/newContactForm';
+import css from './index.css';
 
-class AddContact extends React.Component {
-    
-    render() {
-        const {show, handleCancel, handleOnSubmit, handlePhoneChange, handleInputChange, handleOnSelect} = this.props;
+export default function render({ show, handleCancel, title, children }) {
+    if (show) {
         return (
-            <Modal dialogClassName="sessionMessage" show={show}>
-            <Modal.Header>
-                <Modal.Title>New Contact</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <ContactForm onSubmit={handleOnSubmit} onPhoneChange={handlePhoneChange} onChange={handleInputChange} onSelect={handleOnSelect}/>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={handleCancel}>Cancel</Button>
-            </Modal.Footer>
-        </Modal>
+            <Modal dialogClassName="addNewContact" show={show} onHide={handleCancel}>
+                <Modal.Header >
+                    <Modal.Title>{title}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {children}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={handleCancel}>Cancel</Button>
+                </Modal.Footer>
+            </Modal>
         )
+    } else {
+        return null;
     }
 }
-
-export default AddContact;

@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import getContactList from './service/contacts/index';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import AddContact from './components/addContact';
+import uuidV1 from 'uuid/v1';
+import ContactCellView from './components/contact-detail-view';
+import ContactForm from './components/addContact/newContactForm';
+import css from './App.css';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       contactList: [],
-      showModal: false
+      showModal: false,
+      editDisable: true
     }
 
     this.handleViewContact = this.handleViewContact.bind(this);
@@ -16,8 +21,10 @@ class App extends React.Component {
     this.renderContacts = this.renderContacts.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.handleOnChange = this.handleOnChange.bind(this);
-    this.handleSelect = this.handleSelect.bind(this);
     this.handlePhoneChange = this.handlePhoneChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentWillMount() {
@@ -28,14 +35,12 @@ class App extends React.Component {
   }
 
   handleAddContact() {
-    console.log('addcontacted called');
     this.setState({
       showModal: true
     })
   }
 
   handleOnChange(event) {
-    console.log('handleOnchange called');
     this.setState({
       [event.target.name]: event.target.value
     }, () => {
@@ -44,17 +49,11 @@ class App extends React.Component {
   }
 
   handlePhoneChange(phoneNumber) {
-    // console.log('phone event =>', event)
     this.setState({
       phone: phoneNumber
     })
   }
-  handleSelect(event) {
-    console.log('handleselect called');
-    this.setState({
-      [event.target.name]: event.target.value
-    })
-  }
+
   handleCloseModal() {
     this.setState({
       showModal: false
@@ -63,28 +62,71 @@ class App extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    let contactFile = {};
-    const {firstName, lastName, phone, email, } = this.state;
-    console.log('handlesubmit called');
+    const { firstName, lastName, phone, email, title, province, streetAddress, zipCode, picture, contactList, city } = this.state;
+    const id = uuidV1();
+    const contactFile = {
+      id,
+      firstName,
+      lastName,
+      phone,
+      email,
+      title,
+      province,
+      streetAddress,
+      zipCode,
+      city,
+      picture
+    };
+
+    const contacts = this.state.contactList.concat(contactFile);
+    this.setState({
+      contactList: contacts,
+      showModal: false
+    });
   }
 
+  handleEdit(event) {
+    event.preventDefault();
+    console.log('handleedit called event: ', event.target);
+    this.setState({
+      editDisable: !this.state.editDisable
+    })
+  }
+
+  handleDelete() {
+    console.log('handleDelete called');
+  }
   handleViewContact() {
     console.log('handleviewcontact called');
   }
 
   renderContacts() {
     const contactFiles = this.state.contactList;
-
+    const scope = this;
     let contact = contactFiles.map((contactFile, index) => {
-      const { picture, firstName, lastName } = contactFile;
+      const { picture, firstName, lastName, title } = contactFile;
       const id = index.toString();
       const name = firstName + ' ' + lastName;
+      const handleEdit = scope.handleEdit;
+      const handleDelete = scope.handleDelete;
+      const editable = this.state.editDisable;
+      const imgStyle = {
+        backgroundImage: `url(${picture})`
+      }
       return (
         <div key={id} className="contactFile" >
-          <span className="profilePic">
-            <img src={picture} />
-          </span>
-          <span className="contactName">{name}</span>
+
+          <div className="profilePic" style={imgStyle}></div>
+          <div className="contactName">{name}</div>
+          <div className="title">{title}</div>
+          <Link to={
+            {
+              pathname: `/contacts/${contactFile.id}`,
+              state: { contactFile, handleEdit, handleDelete, editable }
+            }
+          }>
+            Details
+          </Link>
         </div>
       );
     });
@@ -99,14 +141,16 @@ class App extends React.Component {
           Contacts
         </div>
         <div className="addContact">
-          <button className="addContactBtn" onClick={this.handleAddContact}>+</button>
+          <button className="addContactBtn" onClick={this.handleAddContact}>Add Contact</button>
           <AddContact
             show={showModal}
             handleCancel={this.handleCloseModal}
-            handleOnSubmit={this.handleSubmit}
-            handlePhoneChange={this.handlePhoneChange}
-            handleInputChange={this.handleOnChange}
-            handleOnSelect={this.handleSelect} />
+            title='New contact'>
+            <ContactForm
+              onSubmit={this.handleSubmit}
+              onPhoneChange={this.handlePhoneChange}
+              onChange={this.handleOnChange} />
+          </AddContact>
         </div>
         <div className="contactListView">
           {this.renderContacts()}
