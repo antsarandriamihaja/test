@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import getContactList from './service/contacts/index';
-import { Link } from 'react-router-dom';
 import AddContact from './components/addContact';
 import uuidV1 from 'uuid/v1';
 import ContactCellView from './components/contact-detail-view';
@@ -25,6 +24,7 @@ class App extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.renderDetailsView = this.renderDetailsView.bind(this);
   }
 
   componentWillMount() {
@@ -62,7 +62,7 @@ class App extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const { firstName, lastName, phone, email, title, province, streetAddress, zipCode, picture, contactList, city } = this.state;
+    const { firstName, lastName, phone, email, title, province, streetAddress, zipCode, picture, city } = this.state;
     const id = uuidV1();
     const contactFile = {
       id,
@@ -96,45 +96,55 @@ class App extends React.Component {
   handleDelete() {
     console.log('handleDelete called');
   }
-  handleViewContact() {
-    console.log('handleviewcontact called');
+
+  handleViewContact(contact) {    
+    this.setState({
+      person: contact
+    }, () => {
+      console.log('state => ', this.state)
+    })
   }
 
   renderContacts() {
     const contactFiles = this.state.contactList;
     const scope = this;
-    let contact = contactFiles.map((contactFile, index) => {
-      const { picture, firstName, lastName, title } = contactFile;
+    let contact;
+    return contact = contactFiles.map((contactFile, index) => {
       const id = index.toString();
+      const { picture, firstName, lastName, title } = contactFile;
       const name = firstName + ' ' + lastName;
-      const handleEdit = scope.handleEdit;
-      const handleDelete = scope.handleDelete;
-      const editable = this.state.editDisable;
       const imgStyle = {
         backgroundImage: `url(${picture})`
       }
+
       return (
-        <div key={id} className="contactFile" >
+        <div key ={id} className="contactFile" onClick={() => scope.handleViewContact(contactFile)}>
 
           <div className="profilePic" style={imgStyle}></div>
           <div className="contactName">{name}</div>
           <div className="title">{title}</div>
-          <Link to={
-            {
-              pathname: `/contacts/${contactFile.id}`,
-              state: { contactFile, handleEdit, handleDelete, editable }
-            }
-          }>
-            Details
-          </Link>
         </div>
       );
     });
-    return contact;
+  }
+
+  renderDetailsView() {
+    const person = this.state.person;
+    console.log('person', person);
+    if (person) {
+      return (
+        <ContactCellView 
+          contactFile = {person}
+          handleEdit = {this.handleEdit}
+          handleDelete={this.handleDelete}
+          onPhoneChange = {this.handlePhoneChange}
+        />
+      )
+    }
   }
 
   render() {
-    const { showModal } = this.state;
+    const { showModal} = this.state;
     return (
       <div className="App">
         <div className="header">
@@ -148,12 +158,15 @@ class App extends React.Component {
             title='New contact'>
             <ContactForm
               onSubmit={this.handleSubmit}
-              onPhoneChange={this.handlePhoneChange}
+              handlePhoneChange={this.handlePhoneChange}
               onChange={this.handleOnChange} />
           </AddContact>
         </div>
         <div className="contactListView">
           {this.renderContacts()}
+        </div>
+        <div className="contactDetailView">
+          {this.renderDetailsView()}
         </div>
       </div>
     );

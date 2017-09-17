@@ -1,6 +1,5 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import ContactForm from '../addContact/newContactForm';
 import css from './index.css';
 
 export default function render({ show, handleCancel, title, children }) {

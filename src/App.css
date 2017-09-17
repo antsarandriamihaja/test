@@ -8,6 +8,19 @@ html{
     background-color: #1a237e;
     color: white;
     margin: 0px;
+    position: relative
+}
+
+.contactListView {
+    position: relative;
+    top: 100px;
+    left: -20%;
+}
+
+.contactDetailView{
+    position: relative;
+    top: 100px;
+    right: -20%;
 }
 .header {
    
@@ -36,19 +49,21 @@ html{
 }
 
 .contactFile {
-    background-color: red;
+    background-color: #fefefe;
+    color: black;
     position: relative;
-    width: 80%;
+    width: 40%;
+    height: 100px;
     display: block;
     margin: 0 auto;
     margin-top: 30px;
-    height: auto ;
     padding: 30px;
     border: 2px solid white;
 }
 .profilePic {
     position: relative;
-    left: 20px;
+    top: -25px;
+    left: 10px;
     height: 90px;
     width: 90px;
     min-width: 60px;
@@ -67,6 +82,7 @@ html{
 .title {
     position: relative;
     font-size: 1.4em;
-    top: -70px;
+    color: blue;
+    top: -100px;
     left: 200px
 }

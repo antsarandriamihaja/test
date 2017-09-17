@@ -1,21 +1,21 @@
 import React from 'react';
 import ReactPhoneInput from 'react-phone-input';
-import { FormControl, FormGroup, ControlLabel} from 'react-bootstrap';
+import { FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
 
-function FieldGroup({id, label, help, ...props}) {
+function FieldGroup({ id, label, help, ...props }) {
     return (
         <FormGroup controlId={id}>
-          <ControlLabel>{label}</ControlLabel>
-          <FormControl {...props} />
+            <ControlLabel>{label}</ControlLabel>
+            <FormControl {...props} />
         </FormGroup>
-      );
+    );
 }
 
 class ContactForm extends React.Component {
     render() {
-        const { onChange, onSubmit, onPhoneChange } = this.props;
+        const { onChange, onSubmit, handlePhoneChange } = this.props;
         return (
-            <form onSubmit={onSubmit} role="form">
+            <form onSubmit={onSubmit}>
 
                 <FieldGroup
                     label="First Name"
@@ -34,6 +34,8 @@ class ContactForm extends React.Component {
                     name="lastName"
                     onChange={onChange}
                 />
+
+
 
                 <FieldGroup
                     label="Title"
@@ -60,7 +62,7 @@ class ContactForm extends React.Component {
                         className="form-control"
                         name="phone"
                         defaultCountry={'ca'}
-                        onChange={onPhoneChange}
+                        onChange={handlePhoneChange}
                     />
                 </FormGroup>
 
@@ -118,5 +120,5 @@ class ContactForm extends React.Component {
     }
 }
 
-export default ContactForm;
+export default (ContactForm, FieldGroup);
 

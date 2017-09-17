@@ -1,0 +1,13 @@
+.detailView {
+    background-color: #fefefe;
+    color: black;
+    position: relative;
+    width: 40%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    margin-top: 30px;
+    padding: 30px;
+    border: 2px solid white;
+}
+
