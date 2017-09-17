@@ -8,7 +8,7 @@ class ContactForm extends React.Component {
     render() {
         const { onChange, onSubmit, onPhoneChange, onImageChange, imagePreview } = this.props;
         return (
-            <div className="col-md-6">
+            <div className="addContactForm">
 
                 <form onSubmit={onSubmit} role="form">
 
@@ -19,9 +19,6 @@ class ContactForm extends React.Component {
                             <input className="fileInput form-control"
                                 type="file"
                                 onChange={onImageChange} />
-                            {/* <button className="submitButton"
-                                type="submit"
-                                onClick={onImageUpload}>Upload Image</button> */}
                         </div>
                     </div>
 
@@ -121,7 +118,7 @@ class ContactForm extends React.Component {
                     </div>
 
                     <div className="form-group row">
-                        <label className="col-sm-2 col-form-label"></label>
+                        <label className="col-sm-2 col-form-label">Province</label>
                         <select
                             className="form-control"
                             name="province"
@@ -140,10 +137,6 @@ class ContactForm extends React.Component {
                             <option value="Saskatchewan">Saskatchewan</option>
                             <option value="Yukon">Yukon</option>
                         </select>
-                    </div>
-
-                    <div className="form-group row">
-                        <button type="submit" className='purple-btn btn-account'>Submit</button>
                     </div>
                 </form>
             </div>

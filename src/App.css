@@ -7,8 +7,15 @@ html{
     font-family: 'Lato', sans-serif;
     background-color: #1a237e;
     color: white;
-    margin: 0px;
-    position: relative
+    display: block;
+    margin: 0 auto;
+    position: relative;
+}
+
+@keyframes moveLeft {
+    50% {
+        transform: translateX(-50px);
+    }
 }
 
 .contactListView {
@@ -16,15 +23,68 @@ html{
     width: 40%;
     top: 100px;
     margin-right: 0px;
-    margin-left: 30px
+    margin-left: 30px;
+    background-color: pink;
+    height: 600px;
+    overflow-y: auto;
+    overflow-x: hidden
 }
 
-.contactDetailView{
+.mainContainer {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
     position: relative;
-    top: -150px;
+}
+.profileDetailPic {
+    width: 200px !important;
+    height: 200px !important;
+    border: 0.5px solid #880e4f;
+    /* border-radius: 50% */
+}
+.contactDetailView {
+    background-color: #fefefe;
+    color: black;
+    position: absolute;
     width: 30%;
-    right: -50%;
+    top: 16.5%; 
+    left: 60%; 
     margin: 0px;
+}
+.contactWrap {
+    width: 100%;
+    padding: 30px;
+    height: 600px;
+}
+
+.animateLeft {
+    position: absolute;
+    left: 30%;
+    /* top: 30%;
+    left: 20%; */
+    animation: moveLeft 2s ease;
+}
+.buttonHolders {
+    margin-top: 20px;
+    text-align: center;
+}
+.detailViewBtn {
+    background-color: #880e4f;
+    color: white;
+    padding: 10px;
+    margin-right: 10px;
+    border: 0.5px solid #880e4f;
+
+}
+.name {
+    text-align: center;
+}
+.address {
+    text-align: center;
+}
+.title {
+    text-align: center;
+    color: blue;
 }
 .header {
    
@@ -58,7 +118,24 @@ html{
     background-color:#000051;
     color: white;
 }
-
+select {
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;       
+    background-image: url(assets/dropdownArrow.png) !important;
+    background-repeat: no-repeat  ;
+    background-position: 95%;
+}
+.submitBtn {
+    background: #880e4f !important;
+    border: 2px solid #880e4f !important;
+    border-color: #880e4f ;
+    border-radius: 20px;
+    justify-content: flex-start;
+    width: 150px;
+    color: white !important;
+    font-weight: normal
+}
 .contactFile {
     background-color: #fefefe;
     color: black;
@@ -90,7 +167,7 @@ html{
     left: 200px
 }
 
-.title {
+.titleInList {
     position: relative;
     font-size: 1.4em;
     color: blue;

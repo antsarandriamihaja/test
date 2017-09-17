@@ -10,10 +10,26 @@
     box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
     
 }
+.addContactForm {
+    background-color: #fefefe;
+    color: black;
+    position: relative;
+    width: 90%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    padding: 30px;
+    border: 2px solid white;
+}
 .filePreview img {
     width: 100px;
     height: 100px;
     border-radius: 50%
+}
+.filePreview {
+    display: block;
+    margin: 0 auto;
+    text-align: center
 }
 .modal-backdrop {
     position: fixed;
@@ -39,9 +55,11 @@
         padding: 0px;
         padding-left: 15px;
         padding-right: 15px;
-        padding-top: 5px
+        padding-top: 5px;
+        border: none;
+        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
     }
-    .modal-footer {
-        padding-top: 0px !important;
-
+    
+.fileInput{
+    width: 80%
 }

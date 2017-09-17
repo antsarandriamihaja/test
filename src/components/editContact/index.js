@@ -1,14 +1,26 @@
 import React from 'react';
 import ReactPhoneInput from 'react-phone-input';
+import css from './index.css';
+
 class ContactEditView extends React.Component {
     render() {
-        const { contactFile, onChange, onPhoneChange, onSubmit } = this.props;
+        const { contactFile, onChange, onPhoneChange, onSubmit, onImageChange, imagePreview } = this.props;
         const { id, firstName, lastName, phone, email, title, province, streetAddress, zipCode, city, picture } = contactFile;
         return (
             <div className="detailView">
                 <div className="contactContent">
                     <div className='picture'></div>
                     <form onSubmit={onSubmit}>
+
+                        <div className="form-group">
+                            <div className="filePreview">{imagePreview}</div>
+                            <div className="fileUpload">
+                                <h6>Upload a profile photo...</h6>
+                                <input className="fileInput form-control"
+                                    type="file"
+                                    onChange={onImageChange} />
+                            </div>
+                        </div>
 
                         <div className="form-group row">
                             <label className="col-sm-2 col-form-label">First Name</label>
@@ -67,7 +79,8 @@ class ContactEditView extends React.Component {
                                 <ReactPhoneInput
                                     className="form-control"
                                     name="phone"
-                                    defaultValue={phone}
+                                    value={phone}
+                                    defaultCountry={'ca'}
                                     onChange={onPhoneChange} />
                             </div>
                         </div>
@@ -112,7 +125,7 @@ class ContactEditView extends React.Component {
                         </div>
 
                         <div className="form-group row">
-                            <label className="col-sm-2 col-form-label"></label>
+                            <label className="col-sm-2 col-form-label">Province</label>
                             <select
                                 className="form-control"
                                 name="province"
@@ -132,11 +145,6 @@ class ContactEditView extends React.Component {
                                 <option value="Yukon">Yukon</option>
                             </select>
                         </div>
-
-                        <div className="form-group row">
-                            <button type="submit" className='purple-btn btn-account'>Update Contact</button>
-                        </div>
-
                     </form>
                 </div>
             </div>

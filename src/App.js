@@ -19,7 +19,8 @@ class App extends React.Component {
       edit: false,
       filter: '',
       pictureFile: '',
-      imagePreviewUrl: ''
+      imagePreviewUrl: '',
+      moveLeft: false
     }
 
     this.handleViewContact = this.handleViewContact.bind(this);
@@ -33,7 +34,6 @@ class App extends React.Component {
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleFilter = this.handleFilter.bind(this);
     this.handleImageChange = this.handleImageChange.bind(this);
-    // this.handleImageUpload = this.handleImageUpload.bind(this);
 
 
     this.renderEditView = this.renderEditView.bind(this);
@@ -58,7 +58,6 @@ class App extends React.Component {
   }
 
   handleOnChange(event) {
-    console.log('handleonchange called');
     this.setState({
       [event.target.name]: event.target.value
     });
@@ -66,10 +65,7 @@ class App extends React.Component {
 
   //handles phone info 
   handlePhoneChange(phoneNumber) {
-    let contactFile = this.state.contact;
-    contactFile['phone'] = phoneNumber;
     this.setState({
-      // contact: contactFile
       phone: phoneNumber
     })
   }
@@ -94,23 +90,23 @@ class App extends React.Component {
     event.preventDefault();
     const { firstName, lastName, phone, email, title, province, streetAddress, zipCode, picture, city } = this.state;
     const id = uuidV1();
-    const contactFile = {id, firstName, lastName, phone, email, title, province, streetAddress, zipCode, city, picture};
+    const contactFile = { id, firstName, lastName, phone, email, title, province, streetAddress, zipCode, city, picture };
     const contacts = this.state.contactList.concat(contactFile);
     //TODO make a function to change state to undefined;
     this.setState({
       contactList: contacts,
       addContactModal: false,
       person: undefined,
-      firstName:undefined,
-      lastName:undefined,
-      phone:undefined,
-      email:undefined,
-      title:undefined,
-      province:undefined,
-      streetAddress:undefined,
-      zipCode:undefined,
-      city:undefined,
-      picture:undefined
+      firstName: undefined,
+      lastName: undefined,
+      phone: undefined,
+      email: undefined,
+      title: undefined,
+      province: undefined,
+      streetAddress: undefined,
+      zipCode: undefined,
+      city: undefined,
+      picture: undefined
     });
   }
 
@@ -180,7 +176,8 @@ class App extends React.Component {
   //Displays contact details
   handleViewContact(contact) {
     this.setState({
-      person: contact
+      person: contact,
+      moveLeft: true
     });
   }
 
@@ -190,7 +187,7 @@ class App extends React.Component {
     });
   }
 
-  handleImageChange(event){
+  handleImageChange(event) {
     event.preventDefault();
     let reader = new FileReader();
     let file = event.target.files[0];
@@ -261,7 +258,7 @@ class App extends React.Component {
 
           <div className="profilePic" style={imgStyle}></div>
           <div className="contactName">{name}</div>
-          <div className="title">{title}</div>
+          <div className="titleInList">{title}</div>
         </div>
       );
     });
@@ -269,13 +266,22 @@ class App extends React.Component {
 
   //display specific contact info and details
   renderViewContact() {
-    const { person } = this.state;
+    const { person, imagePreviewUrl } = this.state;
     if (person) {
+      let imagePreview;
+      if (imagePreviewUrl) {
+        imagePreview = (<img src={imagePreviewUrl} className="profileDetailPic img-circle" alt="avatar" />)
+      } else if (person.picture) {
+        imagePreview = (<img src={person.picture} className="profileDetailPic img-circle" alt="avatar" />)
+      } else {
+        imagePreview = (<img src="//placehold.it/100" className="profileDetailPic img-circle" alt="avatar" />)
+      }
       return (
         <ViewDetail
           contactFile={person}
           handleEdit={this.handleEdit}
           handleDelete={this.handleDelete}
+          imagePreview={imagePreview}
         />
       )
     } else {
@@ -287,18 +293,19 @@ class App extends React.Component {
     const { addContactModal, imagePreviewUrl } = this.state;
     let imagePreview;
     if (imagePreviewUrl) {
-      imagePreview = (<img src={imagePreviewUrl} className="avatar img-circle" alt="avatar"/>)
+      imagePreview = (<img src={imagePreviewUrl} className="avatar img-circle" alt="avatar" />)
     } else {
       imagePreview = (<img src="//placehold.it/100" className="avatar img-circle" alt="avatar" />)
     }
-
 
     if (addContactModal) {
       return (
         <Wrapper
           show={addContactModal}
           handleCancel={this.handleCloseModal}
-          title='New contact'>
+          title='New contact'
+          action='Add Contact'
+          handleSubmit={this.handleSubmit}>
           <ContactForm
             onSubmit={this.handleSubmit}
             onPhoneChange={this.handlePhoneChange}
@@ -313,19 +320,31 @@ class App extends React.Component {
   }
   //renders edit view to modify contact
   renderEditView() {
-    const { person, edit, editContactModal } = this.state;
+    const { person, edit, editContactModal, imagePreviewUrl } = this.state;
 
     if (person && edit) {
+      let imagePreview;
+      if (imagePreviewUrl) {
+        imagePreview = (<img src={imagePreviewUrl} className="profileDetailPic img-circle" alt="avatar" />)
+      } else if (person.picture) {
+        imagePreview = (<img src={person.picture} className="profileDetailPic img-circle" alt="avatar" />)
+      } else {
+        imagePreview = (<img src="//placehold.it/100" className="profileDetailPic img-circle" alt="avatar" />)
+      }
       return (
         <Wrapper
           show={editContactModal}
           handleCancel={this.handleCloseModal}
-          title='Edit contact'>
+          title='Edit contact'
+          action='Update contact'
+          onSubmit={this.handleUpdate}>
           <ContactEditView
             onSubmit={this.handleUpdate}
             onPhoneChange={this.handlePhoneChange}
             onChange={this.handleOnChange}
-            contactFile={person} />
+            contactFile={person}
+            onImageChange={this.handleImageChange}
+            imagePreview={imagePreview} />
         </Wrapper>
       )
     } else {
@@ -334,31 +353,39 @@ class App extends React.Component {
   }
 
   render() {
-    const { addContactModal } = this.state;
+    const { addContactModal, moveLeft } = this.state;
+    let listclass = "contactListView";
+    if (moveLeft) {
+      listclass+=" animateLeft"
+    }
     return (
       <div className="App">
         <div className="header">
           Contacts
+          <hr />
+          <div className="col-sm-4 form-group">
+            <input
+              className="form-control"
+              name="filter"
+              placeholder="Search..."
+              defaultValue={this.state.filter}
+              onChange={this.handleFilter} />
+          </div>
         </div>
-        <div className="col-sm-4 form-group">
-          <input
-            className="form-control"
-            name="filter"
-            placeholder="Search..."
-            defaultValue={this.state.filter}
-            onChange={this.handleFilter} />
-        </div>
+
         <div className="addContact">
           <button className="addContactBtn" onClick={this.handleAddContact}>Add Contact</button>
         </div>
         <div className="addContactView">
           {this.renderAddContact()}
         </div>
-        <div className="contactListView">
-          {this.renderContacts()}
-        </div>
-        <div className="contactDetailView">
-          {this.renderViewContact()}
+        <div className="mainContainer">
+          <div className={listclass}>
+            {this.renderContacts()}
+          </div>
+          <div className="contactDetailView ">
+            {this.renderViewContact()}
+          </div>
         </div>
         <div className="contactEditView">
           {this.renderEditView()}
