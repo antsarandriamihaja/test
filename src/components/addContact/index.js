@@ -6,10 +6,25 @@ import css from './index.css';
 
 class ContactForm extends React.Component {
     render() {
-        const { onChange, onSubmit,  onPhoneChange } = this.props;
-        return (    
+        const { onChange, onSubmit, onPhoneChange, onImageChange, imagePreview } = this.props;
+        return (
             <div className="col-md-6">
+
                 <form onSubmit={onSubmit} role="form">
+
+                    <div className="form-group">
+                        <div className="filePreview">{imagePreview}</div>
+                        <div className="fileUpload">
+                            <h6>Upload a profile photo...</h6>
+                            <input className="fileInput form-control"
+                                type="file"
+                                onChange={onImageChange} />
+                            {/* <button className="submitButton"
+                                type="submit"
+                                onClick={onImageUpload}>Upload Image</button> */}
+                        </div>
+                    </div>
+
                     <div className="form-group row">
                         <label className="col-sm-2 col-form-label">First Name</label>
                         <div className='col-sm-10'>

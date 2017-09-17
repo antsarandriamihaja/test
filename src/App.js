@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactConfirmAlert, { confirmAlert } from 'react-confirm-alert'; 
+import ReactConfirmAlert, { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import getContactList from './service/contacts/index';
 import Wrapper from './components/containers/modal';
@@ -17,7 +17,9 @@ class App extends React.Component {
       addContactModal: false,
       editContactModal: false,
       edit: false,
-      filter: ''
+      filter: '',
+      pictureFile: '',
+      imagePreviewUrl: ''
     }
 
     this.handleViewContact = this.handleViewContact.bind(this);
@@ -30,11 +32,14 @@ class App extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleFilter = this.handleFilter.bind(this);
+    this.handleImageChange = this.handleImageChange.bind(this);
+    // this.handleImageUpload = this.handleImageUpload.bind(this);
 
 
     this.renderEditView = this.renderEditView.bind(this);
     this.renderViewContact = this.renderViewContact.bind(this);
     this.renderContacts = this.renderContacts.bind(this);
+    this.renderAddContact = this.renderAddContact.bind(this);
   }
 
   //fetch already existing contact list, mimicking fetching from a database
@@ -56,19 +61,20 @@ class App extends React.Component {
     console.log('handleonchange called');
     this.setState({
       [event.target.name]: event.target.value
-    }, () => {
-      console.log(this.state)
     });
   }
 
   //handles phone info 
   handlePhoneChange(phoneNumber) {
+    let contactFile = this.state.contact;
+    contactFile['phone'] = phoneNumber;
     this.setState({
+      // contact: contactFile
       phone: phoneNumber
     })
   }
 
-  
+
   //closes overlay wrapper
   handleCloseModal() {
     const { addContactModal, editContactModal } = this.state;
@@ -88,30 +94,30 @@ class App extends React.Component {
     event.preventDefault();
     const { firstName, lastName, phone, email, title, province, streetAddress, zipCode, picture, city } = this.state;
     const id = uuidV1();
-    const contactFile = {
-      id,
-      firstName,
-      lastName,
-      phone,
-      email,
-      title,
-      province,
-      streetAddress,
-      zipCode,
-      city,
-      picture
-    };
-
+    const contactFile = {id, firstName, lastName, phone, email, title, province, streetAddress, zipCode, city, picture};
     const contacts = this.state.contactList.concat(contactFile);
+    //TODO make a function to change state to undefined;
     this.setState({
       contactList: contacts,
-      addContactModal: false
+      addContactModal: false,
+      person: undefined,
+      firstName:undefined,
+      lastName:undefined,
+      phone:undefined,
+      email:undefined,
+      title:undefined,
+      province:undefined,
+      streetAddress:undefined,
+      zipCode:undefined,
+      city:undefined,
+      picture:undefined
     });
   }
 
 
   //displays modal to allow modification of contact info
-  handleEdit() {
+  handleEdit(event) {
+    event.preventDefault();
     this.setState({
       edit: true,
       editContactModal: true
@@ -120,8 +126,8 @@ class App extends React.Component {
 
 
   //delete contact info
-  handleDelete(person) {
-    const { contactList } = this.state;
+  handleDelete() {
+    const { contactList, person } = this.state;
     const list = contactList.filter((obj) => {
       return obj.id !== person.id
     })
@@ -140,33 +146,33 @@ class App extends React.Component {
   }
 
   //updates contact information after editing
-  handleUpdate( event ) {
+  handleUpdate(event) {
     event.preventDefault();
-    const {person} = this.state;
+    const { person } = this.state;
     const { id } = person;
-    let editedContact = {id};
+    let editedContact = { id };
     //TODO turn this mess into a function or loop .
-    (this.state.firstName ? editedContact.firstName=this.state.firstName : editedContact.firstName = person.firstName);
-    (this.state.lastName ? editedContact.lastName=this.state.lastName : editedContact.lastName = person.lastName);
-    (this.state.email ? editedContact.email=this.state.email: editedContact.email = person.email);
-    (this.state.phone ? editedContact.phone=this.state.phone : editedContact.phone = person.phone);
-    (this.state.title ? editedContact.title=this.state.title : editedContact.title = person.title);
-    (this.state.province ? editedContact.province=this.state.province : editedContact.province = person.province);
-    (this.state.streetAddress ? editedContact.streetAddress=this.state.streetAddress : editedContact.streetAddress = person.streetAddress);
-    (this.state.zipCode ? editedContact.zipCode=this.state.zipCode : editedContact.zipCode = person.zipCode);
-    (this.state.city ? editedContact.city=this.state.city : editedContact.city = person.city);    
-    (this.state.picture ? editedContact.picture=this.state.picture : editedContact.picture = person.picture);
+    (this.state.firstName ? editedContact.firstName = this.state.firstName : editedContact.firstName = person.firstName);
+    (this.state.lastName ? editedContact.lastName = this.state.lastName : editedContact.lastName = person.lastName);
+    (this.state.email ? editedContact.email = this.state.email : editedContact.email = person.email);
+    (this.state.phone ? editedContact.phone = this.state.phone : editedContact.phone = person.phone);
+    (this.state.title ? editedContact.title = this.state.title : editedContact.title = person.title);
+    (this.state.province ? editedContact.province = this.state.province : editedContact.province = person.province);
+    (this.state.streetAddress ? editedContact.streetAddress = this.state.streetAddress : editedContact.streetAddress = person.streetAddress);
+    (this.state.zipCode ? editedContact.zipCode = this.state.zipCode : editedContact.zipCode = person.zipCode);
+    (this.state.city ? editedContact.city = this.state.city : editedContact.city = person.city);
+    (this.state.picture ? editedContact.picture = this.state.picture : editedContact.picture = person.picture);
 
     const { contactList } = this.state;
     let list = contactList.filter((obj) => {
       return obj.id !== person.id
     })
     list.push(editedContact);
-     this.setState({
-       contactList: list,
-       person: editedContact,
-       editContactModal: false
-     });
+    this.setState({
+      contactList: list,
+      person: editedContact,
+      editContactModal: false
+    });
 
   }
 
@@ -182,6 +188,20 @@ class App extends React.Component {
     this.setState({
       filter: event.target.value
     });
+  }
+
+  handleImageChange(event){
+    event.preventDefault();
+    let reader = new FileReader();
+    let file = event.target.files[0];
+    reader.onloadend = () => {
+      this.setState({
+        pictureFile: file,
+        picture: reader.result,
+        imagePreviewUrl: reader.result
+      });
+    }
+    reader.readAsDataURL(file);
   }
 
   getFilteredContacts() {
@@ -220,7 +240,6 @@ class App extends React.Component {
         }
       });
     }
-
     return filteredContacts;
   }
 
@@ -256,7 +275,7 @@ class App extends React.Component {
         <ViewDetail
           contactFile={person}
           handleEdit={this.handleEdit}
-          handleDelete={() => this.handleDelete(person)}
+          handleDelete={this.handleDelete}
         />
       )
     } else {
@@ -264,6 +283,34 @@ class App extends React.Component {
     }
   }
 
+  renderAddContact() {
+    const { addContactModal, imagePreviewUrl } = this.state;
+    let imagePreview;
+    if (imagePreviewUrl) {
+      imagePreview = (<img src={imagePreviewUrl} className="avatar img-circle" alt="avatar"/>)
+    } else {
+      imagePreview = (<img src="//placehold.it/100" className="avatar img-circle" alt="avatar" />)
+    }
+
+
+    if (addContactModal) {
+      return (
+        <Wrapper
+          show={addContactModal}
+          handleCancel={this.handleCloseModal}
+          title='New contact'>
+          <ContactForm
+            onSubmit={this.handleSubmit}
+            onPhoneChange={this.handlePhoneChange}
+            onChange={this.handleOnChange}
+            onImageChange={this.handleImageChange}
+            imagePreview={imagePreview} />
+        </Wrapper>
+      )
+    } else {
+      return null;
+    }
+  }
   //renders edit view to modify contact
   renderEditView() {
     const { person, edit, editContactModal } = this.state;
@@ -303,15 +350,9 @@ class App extends React.Component {
         </div>
         <div className="addContact">
           <button className="addContactBtn" onClick={this.handleAddContact}>Add Contact</button>
-          <Wrapper
-            show={addContactModal}
-            handleCancel={this.handleCloseModal}
-            title='New contact'>
-            <ContactForm
-              onSubmit={this.handleSubmit}
-              onPhoneChange={this.handlePhoneChange}
-              onChange={this.handleOnChange} />
-          </Wrapper>
+        </div>
+        <div className="addContactView">
+          {this.renderAddContact()}
         </div>
         <div className="contactListView">
           {this.renderContacts()}
