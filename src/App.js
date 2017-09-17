@@ -1,9 +1,12 @@
 import React from 'react';
+import ReactConfirmAlert, { confirmAlert } from 'react-confirm-alert'; // Import 
+import 'react-confirm-alert/src/react-confirm-alert.css'
 import getContactList from './service/contacts/index';
-import AddContact from './components/addContact';
+import Wrapper from './components/containers/modal';
 import uuidV1 from 'uuid/v1';
-import ContactCellView from './components/contact-detail-view';
-import ContactForm from './components/addContact/newContactForm';
+import ContactEditView from './components/editContact';
+import ViewDetail from './components/viewDetail';
+import ContactForm from './components/addContact';
 import css from './App.css';
 
 class App extends React.Component {
@@ -11,22 +14,32 @@ class App extends React.Component {
     super(props);
     this.state = {
       contactList: [],
-      showModal: false,
-      editDisable: true
+      addContactModal: false,
+      editContactModal: false,
+      edit: false,
+      filter: ''
     }
 
     this.handleViewContact = this.handleViewContact.bind(this);
     this.handleAddContact = this.handleAddContact.bind(this);
-    this.renderContacts = this.renderContacts.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handlePhoneChange = this.handlePhoneChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-    this.renderDetailsView = this.renderDetailsView.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleOnEdit = this.handleOnEdit.bind(this);
+    this.handlePhoneEdit = this.handlePhoneEdit.bind(this);
+    this.handleFilter = this.handleFilter.bind(this);
+
+
+    this.renderEditView = this.renderEditView.bind(this);
+    this.renderViewContact = this.renderViewContact.bind(this);
+    this.renderContacts = this.renderContacts.bind(this);
   }
 
+  //fetch already existing contact list, mimicking fetching from a database
   componentWillMount() {
     const contactData = getContactList();
     this.setState({
@@ -34,32 +47,49 @@ class App extends React.Component {
     })
   }
 
+  //displays overlay to allow contact creation
   handleAddContact() {
     this.setState({
-      showModal: true
+      addContactModal: true
     })
   }
 
   handleOnChange(event) {
+    console.log('handleonchange called');
     this.setState({
       [event.target.name]: event.target.value
-    }, () => {
-      console.log('state => ', this.state);
-    })
+    });
   }
 
+  //handles phone info 
   handlePhoneChange(phoneNumber) {
     this.setState({
       phone: phoneNumber
     })
   }
 
+  handleOnEdit(event) {
+    console.log('handleonedit called')
+    console.log(event.target.value)
+  }
+  handlePhoneEdit() {
+    console.log('handlePhone edit called')
+  }
+  //closes overlay wrapper
   handleCloseModal() {
-    this.setState({
-      showModal: false
-    })
+    const { addContactModal, editContactModal } = this.state;
+    if (addContactModal) {
+      this.setState({
+        addContactModal: false
+      });
+    } else if (editContactModal) {
+      this.setState({
+        editContactModal: false
+      });
+    }
   }
 
+  //adds new contact to contact list
   handleSubmit(event) {
     event.preventDefault();
     const { firstName, lastName, phone, email, title, province, streetAddress, zipCode, picture, city } = this.state;
@@ -81,32 +111,122 @@ class App extends React.Component {
     const contacts = this.state.contactList.concat(contactFile);
     this.setState({
       contactList: contacts,
-      showModal: false
+      addContactModal: false
     });
   }
 
-  handleEdit(event) {
-    event.preventDefault();
-    console.log('handleedit called event: ', event.target);
+
+  //displays modal to allow modification of contact info
+  handleEdit() {
+    console.log('handleedit called')
     this.setState({
-      editDisable: !this.state.editDisable
+      edit: true,
+      editContactModal: true
     })
   }
 
-  handleDelete() {
-    console.log('handleDelete called');
+
+  //delete contact info
+  handleDelete(person) {
+    const { contactList } = this.state;
+    const list = contactList.filter((obj) => {
+      return obj.id !== person.id
+    })
+    confirmAlert({
+      message: 'Are you sure you want to delete this contact?',
+      confirmLabel: 'Confirm',
+      cancelLabel: 'Cancel',
+      onConfirm: () => {
+        this.setState({
+          contactList: list,
+          person: undefined
+        })
+      }
+    })
+
   }
 
-  handleViewContact(contact) {    
+  //updates contact information after editing
+  handleUpdate(contact) {
+    console.log('contact to update', contact);
+    // const { firstName, lastName, phone, email, title, province, streetAddress, zipCode, picture, city } = this.state;
+
+    // const editedContact = {
+    //   id: contact.id,
+    //   firstName, lastName, phone, email, title, province, streetAddress, zipCode, picture, city
+    // }
+    // const { contactList } = this.state;
+    // let list = contactList.filter((obj) => {
+    //   return obj.id !== contact.id
+    // })
+    // list.concat(editedContact);
+    // console.log('new list should be', list);
+    //  this.setState({
+    //    contactList: list
+    //  }, () => {
+    //    console.log('new contact list', contactList);
+    //  })
+
+  }
+
+
+  //Displays contact details
+  handleViewContact(contact) {
     this.setState({
       person: contact
-    }, () => {
-      console.log('state => ', this.state)
-    })
+    });
   }
 
+  handleFilter(event) {
+    this.setState({
+      filter: event.target.value
+    })
+    // state.form[event.target.name] = event.target.value;
+    // this.setState(state);
+  }
+  getFilteredContacts() {
+    let filteredContacts = this.state.contactList;
+    filteredContacts.sort((a, b) => {
+      var delta = 0;
+      if (a.lastName) {
+        delta = a
+          .lastName
+          .localeCompare(b.lastName);
+      }
+
+      if (delta === 0 && a.firstName) {
+        delta = a
+          .firstName
+          .localeCompare(b.firstName);
+      }
+
+      return delta;
+    });
+    if (this.state.filter && this.state.filter.trim().length > 0) {
+      let filter = this
+        .state
+        .filter
+        .trim()
+        .toLowerCase();
+      filteredContacts = filteredContacts.filter((contact) => {
+        let firstName = (contact.firstName
+          ? contact.firstName.toLowerCase()
+          : '');
+        let lastName = (contact.lastName
+          ? contact.lastName.toLowerCase()
+          : '');
+        if (firstName.indexOf(filter) > -1 || lastName.indexOf(filter) > -1) {
+          return contact;
+        }
+      });
+    }
+
+    return filteredContacts;
+  }
+
+  //listing all contacts
   renderContacts() {
-    const contactFiles = this.state.contactList;
+    const contactFiles = this.getFilteredContacts();
     const scope = this;
     let contact;
     return contact = contactFiles.map((contactFile, index) => {
@@ -118,7 +238,7 @@ class App extends React.Component {
       }
 
       return (
-        <div key ={id} className="contactFile" onClick={() => scope.handleViewContact(contactFile)}>
+        <div key={id} className="contactFile" onClick={() => scope.handleViewContact(contactFile)}>
 
           <div className="profilePic" style={imgStyle}></div>
           <div className="contactName">{name}</div>
@@ -128,45 +248,79 @@ class App extends React.Component {
     });
   }
 
-  renderDetailsView() {
-    const person = this.state.person;
-    console.log('person', person);
+  //display specific contact info and details
+  renderViewContact() {
+    const { person } = this.state;
     if (person) {
       return (
-        <ContactCellView 
-          contactFile = {person}
-          handleEdit = {this.handleEdit}
-          handleDelete={this.handleDelete}
-          onPhoneChange = {this.handlePhoneChange}
+        <ViewDetail
+          contactFile={person}
+          handleEdit={this.handleEdit}
+          handleDelete={() => this.handleDelete(person)}
         />
       )
+    } else {
+      return null;
+    }
+  }
+
+  //renders edit view to modify contact
+  renderEditView() {
+    const { person, edit, editContactModal } = this.state;
+    console.log('person', person);
+    if (person && edit) {
+      return (
+        <Wrapper
+          show={editContactModal}
+          handleCancel={this.handleCloseModal}
+          title='Edit contact'>
+          <ContactEditView
+            onSubmit={this.handleUpdate}
+            onPhoneChange={this.handlePhoneEdit}
+            onChange={this.handleOnEdit}
+            contactFile={person} />
+        </Wrapper>
+      )
+    } else {
+      return null
     }
   }
 
   render() {
-    const { showModal} = this.state;
+    const { addContactModal } = this.state;
     return (
       <div className="App">
         <div className="header">
           Contacts
         </div>
+        <div className="col-sm-4 form-group">
+          <input
+            className="form-control"
+            name="filter"
+            placeholder="Search..."
+            defaultValue={this.state.filter}
+            onChange={this.handleFilter} />
+        </div>
         <div className="addContact">
           <button className="addContactBtn" onClick={this.handleAddContact}>Add Contact</button>
-          <AddContact
-            show={showModal}
+          <Wrapper
+            show={addContactModal}
             handleCancel={this.handleCloseModal}
             title='New contact'>
             <ContactForm
               onSubmit={this.handleSubmit}
-              handlePhoneChange={this.handlePhoneChange}
+              onPhoneChange={this.handlePhoneChange}
               onChange={this.handleOnChange} />
-          </AddContact>
+          </Wrapper>
         </div>
         <div className="contactListView">
           {this.renderContacts()}
         </div>
         <div className="contactDetailView">
-          {this.renderDetailsView()}
+          {this.renderViewContact()}
+        </div>
+        <div className="contactEditView">
+          {this.renderEditView()}
         </div>
       </div>
     );

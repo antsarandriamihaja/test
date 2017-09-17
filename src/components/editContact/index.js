@@ -1,23 +1,23 @@
 import React from 'react';
 import ReactPhoneInput from 'react-phone-input';
-import css from './index.css';
-
-
-
-class ContactForm extends React.Component {
+class ContactEditView extends React.Component {
     render() {
-        const { onChange, onSubmit,  onPhoneChange } = this.props;
-        return (    
-            <div className="col-md-6">
-                <form onSubmit={onSubmit} role="form">
+        const { contactFile, onChange, onPhoneChange, onSubmit} = this.props;
+        const { id, firstName, lastName, phone, email, title, province, streetAddress, zipCode, city, picture } = contactFile;
+        return (
+            <div className="detailView">
+                <div className="contactContent">
+                    <div className='picture'></div>
+                    <form onSubmit={onSubmit}>
+
                     <div className="form-group row">
                         <label className="col-sm-2 col-form-label">First Name</label>
                         <div className='col-sm-10'>
                             <input
                                 type="text"
                                 className="form-control"
-                                placeholder="First Name"
                                 name="firstName"
+                                value={firstName}
                                 onChange={onChange} />
                         </div>
                     </div>
@@ -30,6 +30,7 @@ class ContactForm extends React.Component {
                                 className="form-control"
                                 placeholder="Last Name"
                                 name="lastName"
+                                value={lastName}
                                 onChange={onChange} />
                         </div>
                     </div>
@@ -42,6 +43,7 @@ class ContactForm extends React.Component {
                                 className="form-control"
                                 placeholder="Title"
                                 name="title"
+                                value={title}
                                 onChange={onChange} />
                         </div>
                     </div>
@@ -54,6 +56,7 @@ class ContactForm extends React.Component {
                                 className="form-control"
                                 placeholder="janedoe@gmail.com"
                                 name="email"
+                                value={email}
                                 onChange={onChange} />
                         </div>
                     </div>
@@ -64,7 +67,7 @@ class ContactForm extends React.Component {
                             <ReactPhoneInput
                                 className="form-control"
                                 name="phone"
-                                defaultCountry={'ca'}
+                                value={phone}
                                 onChange={onPhoneChange} />
                         </div>
                     </div>
@@ -77,6 +80,7 @@ class ContactForm extends React.Component {
                                 className="form-control"
                                 placeholder="1600 Pennsylvania Ave"
                                 name="streetAddress"
+                                value={streetAddress}
                                 onChange={onChange} />
                         </div>
                     </div>
@@ -89,6 +93,7 @@ class ContactForm extends React.Component {
                                 className="form-control"
                                 placeholder="Montreal"
                                 name="city"
+                                value={city}
                                 onChange={onChange} />
                         </div>
                     </div>
@@ -100,7 +105,8 @@ class ContactForm extends React.Component {
                                 type="text"
                                 className="form-control"
                                 placeholder="H1M2J8"
-                                name="zipCode"
+                                name="zipcode"
+                                value={zipCode}
                                 onChange={onChange} />
                         </div>
                     </div>
@@ -111,7 +117,7 @@ class ContactForm extends React.Component {
                             className="form-control"
                             name="province"
                             defaultValue="Select province"
-                            onChange={onChange}>
+                            onChange={onChange} defaultValue={province}>
                             <option value="British Columbia">British Columbia</option>
                             <option value="Manitoba">Manitoba</option>
                             <option value="New Brunswick">New Brunswick</option>
@@ -128,13 +134,16 @@ class ContactForm extends React.Component {
                     </div>
 
                     <div className="form-group row">
-                        <button type="submit" className='purple-btn btn-account'>Submit</button>
+                        <button type="submit" className='purple-btn btn-account'>Update Contact</button>
                     </div>
-                </form>
+             
+                    </form> 
+                </div>
             </div>
         )
     }
 }
 
-export default (ContactForm);
 
+
+export default ContactEditView;
