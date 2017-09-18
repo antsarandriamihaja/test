@@ -33,3 +33,5 @@ I also would have liked to add more animation, when a contact is added or delete
 Additionally, there is no validation implementation on the form inputs.
 
 ## Demo 
+(https://contacts-lightspeed.herokuapp.com/
+)

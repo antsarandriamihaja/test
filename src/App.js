@@ -53,7 +53,6 @@ class App extends React.Component {
 
   //displays overlay to allow contact creation
   handleAddContact() {
-    console.log('handleaddcontact called')
     this.setState({
       addContactModal: true
     })
@@ -92,7 +91,7 @@ class App extends React.Component {
     event.preventDefault();
     const { firstName, lastName, phone, email, title, province, streetAddress, zipCode, picture, city } = this.state;
     const id = uuidV1();
-    const {moveLeft} = this.state;
+    const { moveLeft } = this.state;
     let checkIfAdd = false;
     if (moveLeft) {
       checkIfAdd = true
@@ -113,7 +112,7 @@ class App extends React.Component {
       zipCode: undefined,
       city: undefined,
       picture: undefined,
-      moveLeft: checkIfAdd, 
+      moveLeft: checkIfAdd,
       imagePreviewUrl: undefined
     });
   }
@@ -137,7 +136,7 @@ class App extends React.Component {
     })
     confirmAlert({
       message: 'Are you sure you want to delete this contact?',
-      confirmLabel: 'Confirm',
+      confirmLabel: 'Yes',
       cancelLabel: 'Cancel',
       onConfirm: () => {
         this.setState({
@@ -253,34 +252,37 @@ class App extends React.Component {
     return filteredContacts;
   }
 
-  
+
   //listing all contacts
   renderContacts() {
     const contactFiles = this.getFilteredContacts();
     const scope = this;
     const { moveLeft } = this.state;
     let contact;
-    return (         
+    return (
       <div className="listContainer">
-      
-              {contact = contactFiles.map((contactFile, index) => {
-                const id = index.toString();
-                const { picture, firstName, lastName, title } = contactFile;
-                const name = firstName + ' ' + lastName;
-                const imgStyle = {
-                  backgroundImage: `url(${picture})`
-                }
-      
-                return (
-                  <div key={id} className="contactFile" onClick={() => scope.handleViewContact(contactFile)}>
-      
-                    <div className="profilePic" style={imgStyle}></div>
-                    <div className="contactName">{name}</div>
-                    <div className="titleInList">{title}</div>
-                  </div>
-                );
-              })}
+
+        {contact = contactFiles.map((contactFile, index) => {
+          const id = index.toString();
+          const { picture, firstName, lastName, title } = contactFile;
+          const name = firstName + ' ' + lastName;
+          const imgStyle = {
+            backgroundImage: `url(${picture})`
+          }
+
+          return (
+            <div key={id} className="contactFile" onClick={() => scope.handleViewContact(contactFile)}>
+
+              <div className="profilePic" style={imgStyle}></div>
+              <div className="contactName">{name}</div>
+              <div className="titleInList">{title}</div>
             </div>
+          );
+        })}
+        {/* <div className="addContact">
+          <button className="addContactBtn" onClick={this.handleAddContact}>Add Contact</button>
+        </div> */}
+      </div>
     );
 
   }
@@ -314,10 +316,10 @@ class App extends React.Component {
   renderAddContact() {
     const { addContactModal, imagePreviewUrl } = this.state;
     let imagePreview;
-    if (imagePreviewUrl){
-      imagePreview = (<img src={imagePreviewUrl} className="avatar img-circle" alt="avatar" />)      
+    if (imagePreviewUrl) {
+      imagePreview = (<img src={imagePreviewUrl} className="avatar img-circle" alt="avatar" />)
     } else {
-      imagePreview = (<img src="//placehold.it/100" className="avatar img-circle" alt="avatar" />)      
+      imagePreview = (<img src="//placehold.it/100" className="avatar img-circle" alt="avatar" />)
     }
     if (addContactModal) {
       return (
@@ -378,32 +380,34 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="header">
-        <div className="pageTitle">Contacts</div>
-            <input
-              className="searchField"
-              name="filter"
-              placeholder="Search..."
-              defaultValue={this.state.filter}
-              onChange={this.handleFilter} />
-          
+          <input
+            className="searchField"
+            name="filter"
+            placeholder="Search contact..."
+            defaultValue={this.state.filter}
+            onChange={this.handleFilter} />
           <hr className="contactBreak" />
-          
-        </div>
-        <div className="addContact">
-          <button className="addContactBtn" onClick={this.handleAddContact}>Add Contact</button>
-        </div>
 
+        </div>
         <div className="addContactView">
           {this.renderAddContact()}
         </div>
         <Motion style={{ x: spring(moveLeft ? -300 : 0) }}>
           {({ x }) =>
-            <div className="contactListView" 
+          <div>
+            <div className="contactListView"
               style={{
-              WebkitTransform: `translate3d(${x}px, 0, 0)`,
-              transform: `translate3d(${x}px, 0, 0)`,
-            }}>
+                WebkitTransform: `translate3d(${x}px, 0, 0)`,
+                transform: `translate3d(${x}px, 0, 0)`,
+              }}>
               {this.renderContacts()}
+            </div>
+            <div className="addContact" style={{
+                WebkitTransform: `translate3d(${x}px, 0, 0)`,
+                transform: `translate3d(${x}px, 0, 0)`,
+              }}>
+          <button className="addContactBtn" onClick={this.handleAddContact}>Add Contact</button>
+        </div>
             </div>
           }
         </Motion>

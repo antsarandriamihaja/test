@@ -16,31 +16,31 @@ html{
 
 
 .contactListView {
+    display: block;
     margin: 0 auto;
-    position: fixed;
-    top: 40%;
-    left: 33%;
+    position: relative;
+    margin-top:30px;
     width: 500px;
-    height: 600px;
-    overflow-y: auto;
+    max-height: 600px;
+    height: 100%;
+    overflow: auto;
     overflow-x: hidden;
-    margin-bottom: 30px
 }
 .profileDetailPic {
     width: 200px !important;
     height: 200px !important;
     border: 0.5px solid #880e4f;
 }
-.contactDetailView {
+
+.contactViewDetail {
     background-color: #fefefe;
     color: black;
-    position: fixed;
-    width: 30%;
-    left: 60%; 
-    top: 40%;
-    margin-bottom: 30px;
+    max-width: 400px;
+    position: absolute;
+    left: 55%;
+    top: 200px
+  
 }
-
 .contactWrap {
     width: 100%;
     padding: 30px;
@@ -55,28 +55,29 @@ html{
     background-color: #880e4f;
     color: white;
     padding: 10px;
-    margin-right: 10px;
+    margin: 10px;
     border: 0.5px solid #880e4f;
 
 }
 .name {
+    text-transform: capitalize;
     text-align: center;
 }
 .address {
-    text-align: center;
+    text-align: left;
 }
 .title {
+    text-transform: capitalize;
     text-align: center;
     color: blue;
 }
 .header {
-   
    display: block;
    margin: 0 auto;
-   margin-top: 80px;
    font-size: 3em;
    float: left; 
-   width: 100%
+   width: 100%;
+   margin-bottom: 30px
 
 }
 
@@ -86,16 +87,12 @@ html{
     border-color: transparent;
     background-color: #1a237e;
     color: white;
-    margin-left: 40%;
-    text-align: right
+    text-align: left
 }
 .searchField:focus {
-    color: #bc477b
+    color: #880e4f
 }
-.pageTitle {
-    float: left;
-    justify-content: flex-end;
-}
+
 #react-confirm-alert-firm-svg {
     display: none !important
 }
@@ -104,20 +101,21 @@ html{
     background: rgba(0,0,0, 0.8);
 }
 .addContactBtn {
-    margin-top: 20px;
-    width: 300px;
-    float: right;
-    margin-right: 30px;
-    margin-bottom: 30px;
+    width:100%;
+    /* position: absolute;
+    bottom: 0px; */
     padding: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
     font-size: 1.6em !important;
-    border-radius: 10px;
-    border: 2px solid #000051;
-    background-color:#000051;
+    border: 2px solid #880e4f;
+    background-color:#880e4f;
     color: white;
-    z-index:1000;
+}
+.addContact{
+    margin: 0 auto;
+    max-width:500px ;
+    width: 100%;
 }
 .contactBreak {
    margin-top: 5px;
@@ -190,6 +188,7 @@ select {
 }
 
 .contactName {
+    text-transform: capitalize;
     font-size: 1.6em;
     justify-content: flex-start;
     position: relative;
@@ -198,6 +197,7 @@ select {
 }
 
 .titleInList {
+    text-transform: capitalize;
     position: relative;
     font-size: 1.2em;
     color: blue;

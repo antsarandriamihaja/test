@@ -22,8 +22,8 @@ class ViewDetail extends React.Component {
                     <p className="email">Email: <a href={this.formatMailto(contactFile)}>{email}</a></p>
                     <div className="address">
                         <p className="street">Address: {streetAddress} </p>
-                        <p className="city">{city}</p>
-                        <p className="zipCodeAndProvince">{zipCode + ', ' + province}</p>
+                        <p className="city">City: {city}</p>
+                        <p className="zipCodeAndProvince">Postal code: {zipCode + ', ' + province}</p>
                     </div>
                 </section>
 
