@@ -11,21 +11,20 @@ html{
     display: block;
     margin: 0 auto;
     position: relative;
+    margin-bottom: 5%;
 }
 
-.listContainer {
-    background-color: red;
-}
+
 .contactListView {
     margin: 0 auto;
-    position: relative;
-    top: 100px;
-    max-width: 700px;
-    /* width:40%; */
-    background-color: pink;
+    position: fixed;
+    top: 40%;
+    left: 33%;
+    width: 500px;
     height: 600px;
     overflow-y: auto;
     overflow-x: hidden;
+    margin-bottom: 30px
 }
 .profileDetailPic {
     width: 200px !important;
@@ -35,12 +34,11 @@ html{
 .contactDetailView {
     background-color: #fefefe;
     color: black;
-    position: relative;
+    position: fixed;
     width: 30%;
     left: 60%; 
-    top: -500px;
-    /* margin-top: -400px; */
-    
+    top: 40%;
+    margin-bottom: 30px;
 }
 
 .contactWrap {
@@ -77,10 +75,27 @@ html{
    margin: 0 auto;
    margin-top: 80px;
    font-size: 3em;
-   margin-left: 30px;
+   float: left; 
+   width: 100%
 
 }
 
+.searchField {
+    outline: 0;
+    border-width: 0 0 2px 0;
+    border-color: transparent;
+    background-color: #1a237e;
+    color: white;
+    margin-left: 40%;
+    text-align: right
+}
+.searchField:focus {
+    color: #bc477b
+}
+.pageTitle {
+    float: left;
+    justify-content: flex-end;
+}
 #react-confirm-alert-firm-svg {
     display: none !important
 }
@@ -97,12 +112,16 @@ html{
     padding: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
-    font-size: 1.6em;
+    font-size: 1.6em !important;
     border-radius: 10px;
     border: 2px solid #000051;
     background-color:#000051;
     color: white;
     z-index:1000;
+}
+.contactBreak {
+   margin-top: 5px;
+   
 }
 select {
     -webkit-appearance: none; 
