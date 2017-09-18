@@ -2,8 +2,6 @@ import React from 'react';
 import ReactPhoneInput from 'react-phone-input';
 import css from './index.css';
 
-
-
 class ContactForm extends React.Component {
     render() {
         const { onChange, onSubmit, onPhoneChange, onImageChange, imagePreview } = this.props;
@@ -11,7 +9,6 @@ class ContactForm extends React.Component {
             <div className="addContactForm">
 
                 <form onSubmit={onSubmit}>
-
                     <div className="form-group">
                         <div className="filePreview">{imagePreview}</div>
                         <div className="fileUpload">

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactPhoneInput from 'react-phone-input';
 import css from './index.css';
 
+//I would have liked to have a separate component for this form so I can re-use it for both adding new contact, and editing existing contacts.
 class ContactEditView extends React.Component {
     render() {
         const { contactFile, onChange, onPhoneChange, onSubmit, onImageChange, imagePreview } = this.props;

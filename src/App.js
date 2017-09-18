@@ -1,6 +1,5 @@
 import React from 'react';
 import { confirmAlert } from 'react-confirm-alert';
-// import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Motion, spring, TransitionMotion, presets } from 'react-motion';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import getContactList from './service/contacts/index';
@@ -59,7 +58,7 @@ class App extends React.Component {
       addContactModal: true
     })
   }
-
+  //update state on form input change
   handleOnChange(event) {
     this.setState({
       [event.target.name]: event.target.value
@@ -191,12 +190,14 @@ class App extends React.Component {
     });
   }
 
+  //handle search through contacts
   handleFilter(event) {
     this.setState({
       filter: event.target.value
     });
   }
 
+  //updating image url state on file upload and allow for preview
   handleImageChange(event) {
     event.preventDefault();
     let reader = new FileReader();
@@ -211,6 +212,7 @@ class App extends React.Component {
     reader.readAsDataURL(file);
   }
 
+  //filter contacts by search
   getFilteredContacts() {
     let filteredContacts = this.state.contactList;
     filteredContacts.sort((a, b) => {
@@ -308,6 +310,7 @@ class App extends React.Component {
     }
   }
 
+  //render add contact form
   renderAddContact() {
     const { addContactModal, imagePreviewUrl } = this.state;
     let imagePreview;
