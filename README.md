@@ -30,5 +30,6 @@ I realize that there are a lot that can be improved.
 My main <App/> component is too large and should be divided into multiple components. For example, have the different renderAddContact,renderEditContact and so on, be a separate functional component on their own.
 There are also some lengthy, ugly code that I wish to improve on.
 I also would have liked to add more animation, when a contact is added or deleted. I tried doing this animation using `react-motion` TransitionMotion component, but it didn't quite work out.
+Additionally, there is no validation implementation on the form inputs.
 
 ## Demo 

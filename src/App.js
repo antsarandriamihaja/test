@@ -1,6 +1,6 @@
 import React from 'react';
 import { confirmAlert } from 'react-confirm-alert';
-import { Motion, spring, TransitionMotion, presets } from 'react-motion';
+import { Motion, spring } from 'react-motion';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import getContactList from './service/contacts/index';
 import Wrapper from './components/containers/modal';
