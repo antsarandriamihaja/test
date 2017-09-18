@@ -117,11 +117,23 @@ html{
   
 }
 
+@keyframes fadeIn {
+    0% {
+        opacity: 0.0;
+    }
+    90% {
+        opacity: 0.8
+    }
+    100% {
+        opacity: 1;
+    }
+}
 .contactWrap {
     width: 100%;
     padding: 30px;
     height: 600px;
     text-align: center;
+    animation: fadeIn 3s ease;
 }
 .street{
     text-align: center;
@@ -262,6 +274,7 @@ select {
     top: -100px;
     left: 200px 
 }
+
 
 .titleInList {
     text-transform: capitalize;
