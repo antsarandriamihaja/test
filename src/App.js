@@ -1,6 +1,7 @@
 import React from 'react';
 import { confirmAlert } from 'react-confirm-alert';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+// import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { Motion, spring } from 'react-motion';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import getContactList from './service/contacts/index';
 import Wrapper from './components/containers/modal';
@@ -107,7 +108,8 @@ class App extends React.Component {
       streetAddress: undefined,
       zipCode: undefined,
       city: undefined,
-      picture: undefined
+      picture: undefined,
+      moveLeft: false
     });
   }
 
@@ -135,7 +137,8 @@ class App extends React.Component {
       onConfirm: () => {
         this.setState({
           contactList: list,
-          person: undefined
+          person: undefined,
+          moveLeft: false
         })
       }
     })
@@ -179,6 +182,8 @@ class App extends React.Component {
     this.setState({
       person: contact,
       moveLeft: true
+    }, () => {
+      console.log(this.state)
     });
   }
 
@@ -246,28 +251,28 @@ class App extends React.Component {
   renderContacts() {
     const contactFiles = this.getFilteredContacts();
     const scope = this;
+    const { moveLeft } = this.state;
     let contact;
     return (
       <div className="listContainer">
-        <ReactCSSTransitionGroup transitionName="contactMount" transitionEnterTimeout={2000} transitionLeaveTimeout={700}>
-          {contact = contactFiles.map((contactFile, index) => {
-            const id = index.toString();
-            const { picture, firstName, lastName, title } = contactFile;
-            const name = firstName + ' ' + lastName;
-            const imgStyle = {
-              backgroundImage: `url(${picture})`
-            }
 
-            return (
-              <div key={id} className="contactFile" onClick={() => scope.handleViewContact(contactFile)}>
+        {contact = contactFiles.map((contactFile, index) => {
+          const id = index.toString();
+          const { picture, firstName, lastName, title } = contactFile;
+          const name = firstName + ' ' + lastName;
+          const imgStyle = {
+            backgroundImage: `url(${picture})`
+          }
 
-                <div className="profilePic" style={imgStyle}></div>
-                <div className="contactName">{name}</div>
-                <div className="titleInList">{title}</div>
-              </div>
-            );
-          })}
-        </ReactCSSTransitionGroup>
+          return (
+            <div key={id} className="contactFile" onClick={() => scope.handleViewContact(contactFile)}>
+
+              <div className="profilePic" style={imgStyle}></div>
+              <div className="contactName">{name}</div>
+              <div className="titleInList">{title}</div>
+            </div>
+          );
+        })}
       </div>
     );
 
@@ -277,6 +282,7 @@ class App extends React.Component {
   renderViewContact() {
     const { person, imagePreviewUrl } = this.state;
     if (person) {
+      console.log('renderviewcontact should show');
       let imagePreview;
       if (imagePreviewUrl) {
         imagePreview = (<img src={imagePreviewUrl} className="profileDetailPic img-circle" alt="avatar" />)
@@ -358,10 +364,10 @@ class App extends React.Component {
 
   render() {
     const { moveLeft } = this.state;
-    let listclass = "contactListView";
-    if (moveLeft) {
-      listclass += " animateLeft"
-    }
+    // let listclass = "contactListView";
+    // if (moveLeft) {
+    //   listclass += " animateLeft"
+    // }
     return (
       <div className="App">
         <div className="header">
@@ -383,12 +389,23 @@ class App extends React.Component {
         <div className="addContactView">
           {this.renderAddContact()}
         </div>
-        <div className={listclass}>
-          {this.renderContacts()}
-        </div>
-        <div className="contactDetailView ">
-          {this.renderViewContact()}
-        </div>
+        <Motion style={{ x: spring(moveLeft ? -300 : 0) }}>
+          {({ x }) =>
+            <div className="contactListView" style={{
+              WebkitTransform: `translate3d(${x}px, 0, 0)`,
+              transform: `translate3d(${x}px, 0, 0)`,
+            }}>
+              {this.renderContacts()}
+            </div>
+          }
+        </Motion>
+        <Motion style={{ x: spring(moveLeft ? 0 : -300) }}>
+          {({ x }) =>
+            <div className="contactDetailView ">
+              {this.renderViewContact()}
+            </div>
+          }
+        </Motion>
         <div className="contactEditView">
           {this.renderEditView()}
         </div>

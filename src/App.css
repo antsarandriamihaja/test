@@ -13,20 +13,6 @@ html{
     position: relative;
 }
 
-@keyframes moveLeft {
-100% {left:0;}
-}
-@keyframes fadeIn {
-    0% {
-        opacity: 0.0;
-    }
-    90% {
-        opacity: 0.8
-    }
-    100% {
-        opacity: 1;
-    }
-}
 .listContainer {
     background-color: red;
 }
@@ -49,11 +35,12 @@ html{
 .contactDetailView {
     background-color: #fefefe;
     color: black;
-    position: absolute;
+    position: relative;
     width: 30%;
     left: 60%; 
-    margin-top: 100px;
-    animation: fadeIn 1s ease-out
+    top: -500px;
+    /* margin-top: -400px; */
+    
 }
 
 .contactWrap {
@@ -62,14 +49,6 @@ html{
     height: 600px;
 }
 
-.animateLeft {
-    position: absolute;
-    left: 10%;
-    width: 40%;
-    margin-top:250px;
-    animation: moveLeft 4s steps(100) ease-in-out;
-    animation-delay: 1s;
-}
 .buttonHolders {
     margin-top: 20px;
     text-align: center;
