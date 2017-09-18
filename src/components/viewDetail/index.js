@@ -1,18 +1,21 @@
 import React from 'react';
-
 class ViewDetail extends React.Component {
     formatMailto(contactFile) {
         return `mailto:${contactFile.firstName}%20${contactFile.lastName}<${contactFile.email}>`
     }
+    
     render() {
         const { contactFile, handleDelete, handleEdit, imagePreview} = this.props;
         const { firstName, lastName, email, title, phone, streetAddress, city, province, zipCode } = contactFile;
         const name = firstName + ' ' + lastName;
+        const imgStyle = {
+            backgroundImage: `url(${imagePreview})`
+        }
         return (
             <div className="contactViewDetail">
                 <div className="contactWrap">
                 <header>
-                <div className="filePreview">{imagePreview}</div>
+                <div className="filePreviewDetail" style={imgStyle}></div>
                     <h3 className="name">{name}</h3>
                     <h4 className="title">{title}</h4>
                 </header>
@@ -23,7 +26,7 @@ class ViewDetail extends React.Component {
                     <div className="address">
                         <p className="street">Address: {streetAddress} </p>
                         <p className="city">City: {city}</p>
-                        <p className="zipCodeAndProvince">Postal code: {zipCode + ', ' + province}</p>
+                        <p className="zipCodeAndProvince">Postal code: {zipCode}  {province}</p>
                     </div>
                 </section>
 

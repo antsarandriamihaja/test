@@ -1,11 +1,11 @@
 html{
     height: 100% !important;
-    background-color: #1a237e;
+    background-color: #000051;
 }
 
 .App {
     font-family: 'Lato', sans-serif;
-    background-color: #1a237e;
+    background-color: #000051;
     padding:5%;
     color: white;
     display: block;
@@ -19,37 +19,54 @@ html{
     display: block;
     margin: 0 auto;
     position: relative;
-    margin-top:30px;
+    margin-top:60px;
     width: 500px;
-    max-height: 600px;
+    max-height: 800px;
     height: 100%;
     overflow: auto;
     overflow-x: hidden;
 }
-.profileDetailPic {
+.filePreviewDetail {
     width: 200px !important;
     height: 200px !important;
     border: 0.5px solid #880e4f;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-left: 30px;
+    border-radius: 50%;
+    background-position:50% 50%;
 }
 
 .contactViewDetail {
     background-color: #fefefe;
     color: black;
     max-width: 400px;
-    position: absolute;
-    left: 55%;
-    top: 200px
+    position: relative;
+    left: 70%;
+    top:-655px;
   
 }
 .contactWrap {
     width: 100%;
     padding: 30px;
     height: 600px;
+    text-align: center;
 }
-
+.street{
+    text-align: center;
+}
+.city{
+    text-align: center;
+}
+.zipCodeAndProvince {
+    text-align: center;
+}
 .buttonHolders {
     margin-top: 20px;
     text-align: center;
+}
+.address {
+    text-align: center
 }
 .detailViewBtn {
     background-color: #880e4f;
@@ -85,7 +102,7 @@ html{
     outline: 0;
     border-width: 0 0 2px 0;
     border-color: transparent;
-    background-color: #1a237e;
+    background-color: #000051;
     color: white;
     text-align: left
 }
@@ -102,8 +119,6 @@ html{
 }
 .addContactBtn {
     width:100%;
-    /* position: absolute;
-    bottom: 0px; */
     padding: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -155,26 +170,7 @@ select {
 .contactFile:hover {
     background-color:#f5f5f5;
 }
-.contactMount-enter {
-    opacity:0.01;
-    width: 0px;
-}
 
-.contactMount-enter.contactMount-enter-active{
-    opacity:1;
-    width: 100px;
-    transition: 2000ms;
-}
-
-.contactMount-leave {
-    opacity:1;
-    width:100px;
-}
-.contactMount-leave.contactMout-leave-active{
-    opacity:0.01;
-    width:0px;
-    transition: 700ms
-}
 .profilePic {
     position: relative;
     top: -25px;

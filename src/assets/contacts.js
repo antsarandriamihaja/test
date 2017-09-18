@@ -10,7 +10,7 @@ const contacts = [
         province: 'DC',
         zipCode: '20500',
         country: 'USA',
-        phone:'+1 202-456-1111',
+        phone:'+12024561111',
         email: 'djtrump@hotmail.com',
         picture:'http://weknowyourdreams.com/images/kittens/kittens-01.jpg'
     },
@@ -24,7 +24,7 @@ const contacts = [
         province: 'Colorado',
         zipCode: '11111',
         country: 'USA',
-        phone:'+1 532-333-8988',
+        phone:'+15323338988',
         email: 'm.kay@hotmail.com',
         picture:'https://upload.wikimedia.org/wikipedia/tr/3/33/Mr_Mackey.png'
     },
@@ -38,7 +38,7 @@ const contacts = [
         province: 'Colorado',
         zipCode: '11111',
         country: 'USA',
-        phone:'+1 532-333-8988',
+        phone:'+15323338988',
         email: 'yourmom@hotmail.com',
         picture:'http://southparkstudios.mtvnimages.com/shared/characters/alter-egos/identities-cop-cartman.png'
     },
@@ -52,10 +52,38 @@ const contacts = [
         province: 'Pennsylvania',
         zipCode: '11111',
         country: 'USA',
-        phone:'+1 532-333-8988',
+        phone:'+15323338988',
         email: 'shrutefarms@hotmail.com',
         picture:'http://churchwilliams.com/wp-content/uploads/2013/03/dwight-schrute.jpg'
+    },
+    {
+        id: 5,
+        firstName: 'Pickle',
+        lastName: 'Rick',
+        title: 'Therapist',
+        streetAddress: 'planet nasty',
+        city: 'who knows',
+        province: 'Pennsylvania',
+        zipCode: '11111',
+        country: 'USA',
+        phone:'+14322342344',
+        email: 'pickles@hotmail.com',
+        picture: 'https://ih0.redbubble.net/image.351391128.2670/flat,800x800,075,f.u2.jpg'    },
+    {
+        id: 6,
+        firstName: 'creed',
+        lastName: 'incognito',
+        title: 'who knows',
+        streetAddress: 'Office',
+        city: 'Scranton',
+        province: 'Pennsylvania',
+        zipCode: '11111',
+        country: 'USA',
+        phone:'+15323338988',
+        email: 'breakingbad@hotmail.com',
+        picture:'http://images.cdn.starpulse.com/Photos/Previews/The-Office-tv-16.jpg'
     }
+    
 ]
 
 export default contacts;

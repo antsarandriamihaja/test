@@ -59,9 +59,11 @@ class App extends React.Component {
   }
   //update state on form input change
   handleOnChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
+    if(event.target.value) {
+      this.setState({
+        [event.target.name]: event.target.value
+      });
+    } 
   }
 
   //handles phone info 
@@ -89,15 +91,20 @@ class App extends React.Component {
   //adds new contact to contact list
   handleSubmit(event) {
     event.preventDefault();
-    const { firstName, lastName, phone, email, title, province, streetAddress, zipCode, picture, city } = this.state;
-    const id = uuidV1();
     const { moveLeft } = this.state;
     let checkIfAdd = false;
     if (moveLeft) {
       checkIfAdd = true
     }
-    const contactFile = { id, firstName, lastName, phone, email, title, province, streetAddress, zipCode, city, picture };
-    const contacts = this.state.contactList.concat(contactFile);
+    let contacts, isEnabled;
+    const { firstName, lastName, phone, email, title, province, streetAddress, zipCode, picture, city } = this.state;
+    const id = uuidV1();
+    if (firstName && lastName) {
+      const contactFile = { id, firstName, lastName, phone, email, title, province, streetAddress, zipCode, city, picture };
+      contacts = this.state.contactList.concat(contactFile);      
+    } else {
+      contacts = this.state.contactList;
+    }
     //TODO make a function to change state to undefined;
     this.setState({
       contactList: contacts,
@@ -279,9 +286,7 @@ class App extends React.Component {
             </div>
           );
         })}
-        {/* <div className="addContact">
-          <button className="addContactBtn" onClick={this.handleAddContact}>Add Contact</button>
-        </div> */}
+
       </div>
     );
 
@@ -293,11 +298,11 @@ class App extends React.Component {
     if (person) {
       let imagePreview;
       if (imagePreviewUrl) {
-        imagePreview = (<img src={imagePreviewUrl} className="profileDetailPic img-circle" alt="avatar" />)
+        imagePreview = imagePreviewUrl
       } else if (person.picture) {
-        imagePreview = (<img src={person.picture} className="profileDetailPic img-circle" alt="avatar" />)
+        imagePreview = (person.picture)
       } else {
-        imagePreview = (<img src="//placehold.it/100" className="profileDetailPic img-circle" alt="avatar" />)
+        imagePreview = "//placehold.it/100" 
       }
       return (
         <ViewDetail
@@ -314,8 +319,11 @@ class App extends React.Component {
 
   //render add contact form
   renderAddContact() {
-    const { addContactModal, imagePreviewUrl } = this.state;
-    let imagePreview;
+    const { addContactModal, imagePreviewUrl, firstName, lastName } = this.state;
+    let imagePreview, isEnabled;
+    if (firstName && lastName) {
+      isEnabled=true
+    }
     if (imagePreviewUrl) {
       imagePreview = (<img src={imagePreviewUrl} className="avatar img-circle" alt="avatar" />)
     } else {
@@ -328,7 +336,8 @@ class App extends React.Component {
           handleCancel={this.handleCloseModal}
           title='New contact'
           action='Add Contact'
-          handleSubmit={this.handleSubmit}>
+          handleSubmit={this.handleSubmit}
+          enabled={!isEnabled}>
           <ContactForm
             onSubmit={this.handleSubmit}
             onPhoneChange={this.handlePhoneChange}
@@ -392,7 +401,7 @@ class App extends React.Component {
         <div className="addContactView">
           {this.renderAddContact()}
         </div>
-        <Motion style={{ x: spring(moveLeft ? -300 : 0) }}>
+        <Motion style={{ x: spring(moveLeft ? -280 : 0) }}>
           {({ x }) =>
           <div>
             <div className="contactListView"
@@ -411,9 +420,12 @@ class App extends React.Component {
             </div>
           }
         </Motion>
-        <Motion style={{ y: spring(moveLeft ? -300 : 0) }}>
+        <Motion style={{ x: spring(moveLeft ? -120 : 0) }}>
           {({ x }) =>
-            <div className="contactDetailView ">
+            <div className="contactDetailView" style={{
+              WebkitTransform: `translate3d(${x}px, 0, 0)`,
+              transform: `translate3d(${x}px, 0, 0)`,
+              }}>
               {this.renderViewContact()}
             </div>
           }

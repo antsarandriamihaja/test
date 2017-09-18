@@ -27,6 +27,7 @@ class ContactForm extends React.Component {
                                 className="form-control"
                                 placeholder="First Name"
                                 name="firstName"
+                                required
                                 onChange={onChange} />
                         </div>
                     </div>
@@ -39,6 +40,7 @@ class ContactForm extends React.Component {
                                 className="form-control"
                                 placeholder="Last Name"
                                 name="lastName"
+                                required
                                 onChange={onChange} />
                         </div>
                     </div>
@@ -59,7 +61,7 @@ class ContactForm extends React.Component {
                         <label className="col-sm-2 col-form-label">Email</label>
                         <div className='col-sm-10'>
                             <input
-                                type="text"
+                                type="email"
                                 className="form-control"
                                 placeholder="janedoe@gmail.com"
                                 name="email"

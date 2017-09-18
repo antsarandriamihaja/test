@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
-export default function render({ show, handleCancel, title, children, handleSubmit, action }) {
+export default function render({ show, handleCancel, title, children, handleSubmit, action, enabled }) {
     if (show) {
         return (
             <Modal dialogClassName="addNewContact" show={show} onHide={handleCancel}>
@@ -13,7 +13,7 @@ export default function render({ show, handleCancel, title, children, handleSubm
                 </Modal.Body>
                 <Modal.Footer>
                     <Button className="cancelBtn" onClick={handleCancel}>Cancel</Button>
-                    <Button className="submitBtn"onClick={handleSubmit}>{action}</Button>
+                    <Button className="submitBtn" disabled={enabled}onClick={handleSubmit}>{action}</Button>
                 </Modal.Footer>
             </Modal>
         )
