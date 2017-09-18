@@ -10,7 +10,7 @@ class ContactForm extends React.Component {
         return (
             <div className="addContactForm">
 
-                <form onSubmit={onSubmit} role="form">
+                <form onSubmit={onSubmit}>
 
                     <div className="form-group">
                         <div className="filePreview">{imagePreview}</div>

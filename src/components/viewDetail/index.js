@@ -6,12 +6,8 @@ class ViewDetail extends React.Component {
     }
     render() {
         const { contactFile, handleDelete, handleEdit, imagePreview} = this.props;
-        const { picture, firstName, lastName, email, title, phone, streetAddress, city, province, zipCode } = contactFile;
+        const { firstName, lastName, email, title, phone, streetAddress, city, province, zipCode } = contactFile;
         const name = firstName + ' ' + lastName;
-        const address = `${streetAddress}, ${city} \n ${zipCode}, ${province}`;
-        const styles = {
-            backgroundImage: 'url(' + picture + ')'
-        }
         return (
             <div className="contactViewDetail">
                 <div className="contactWrap">

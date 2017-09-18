@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactConfirmAlert, { confirmAlert } from 'react-confirm-alert';
+import { confirmAlert } from 'react-confirm-alert';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import getContactList from './service/contacts/index';
 import Wrapper from './components/containers/modal';
@@ -52,6 +53,7 @@ class App extends React.Component {
 
   //displays overlay to allow contact creation
   handleAddContact() {
+    console.log('handleaddcontact called')
     this.setState({
       addContactModal: true
     })
@@ -96,7 +98,6 @@ class App extends React.Component {
     this.setState({
       contactList: contacts,
       addContactModal: false,
-      person: undefined,
       firstName: undefined,
       lastName: undefined,
       phone: undefined,
@@ -235,6 +236,7 @@ class App extends React.Component {
         if (firstName.indexOf(filter) > -1 || lastName.indexOf(filter) > -1) {
           return contact;
         }
+
       });
     }
     return filteredContacts;
@@ -245,23 +247,30 @@ class App extends React.Component {
     const contactFiles = this.getFilteredContacts();
     const scope = this;
     let contact;
-    return contact = contactFiles.map((contactFile, index) => {
-      const id = index.toString();
-      const { picture, firstName, lastName, title } = contactFile;
-      const name = firstName + ' ' + lastName;
-      const imgStyle = {
-        backgroundImage: `url(${picture})`
-      }
+    return (
+      <div className="listContainer">
+        <ReactCSSTransitionGroup transitionName="contactMount" transitionEnterTimeout={2000} transitionLeaveTimeout={700}>
+          {contact = contactFiles.map((contactFile, index) => {
+            const id = index.toString();
+            const { picture, firstName, lastName, title } = contactFile;
+            const name = firstName + ' ' + lastName;
+            const imgStyle = {
+              backgroundImage: `url(${picture})`
+            }
 
-      return (
-        <div key={id} className="contactFile" onClick={() => scope.handleViewContact(contactFile)}>
+            return (
+              <div key={id} className="contactFile" onClick={() => scope.handleViewContact(contactFile)}>
 
-          <div className="profilePic" style={imgStyle}></div>
-          <div className="contactName">{name}</div>
-          <div className="titleInList">{title}</div>
-        </div>
-      );
-    });
+                <div className="profilePic" style={imgStyle}></div>
+                <div className="contactName">{name}</div>
+                <div className="titleInList">{title}</div>
+              </div>
+            );
+          })}
+        </ReactCSSTransitionGroup>
+      </div>
+    );
+
   }
 
   //display specific contact info and details
@@ -290,13 +299,8 @@ class App extends React.Component {
   }
 
   renderAddContact() {
-    const { addContactModal, imagePreviewUrl } = this.state;
-    let imagePreview;
-    if (imagePreviewUrl) {
-      imagePreview = (<img src={imagePreviewUrl} className="avatar img-circle" alt="avatar" />)
-    } else {
-      imagePreview = (<img src="//placehold.it/100" className="avatar img-circle" alt="avatar" />)
-    }
+    const { addContactModal } = this.state;
+    let imagePreview = (<img src="//placehold.it/100" className="avatar img-circle" alt="avatar" />)
 
     if (addContactModal) {
       return (
@@ -337,7 +341,7 @@ class App extends React.Component {
           handleCancel={this.handleCloseModal}
           title='Edit contact'
           action='Update contact'
-          onSubmit={this.handleUpdate}>
+          handleSubmit={this.handleUpdate}>
           <ContactEditView
             onSubmit={this.handleUpdate}
             onPhoneChange={this.handlePhoneChange}
@@ -353,10 +357,10 @@ class App extends React.Component {
   }
 
   render() {
-    const { addContactModal, moveLeft } = this.state;
+    const { moveLeft } = this.state;
     let listclass = "contactListView";
     if (moveLeft) {
-      listclass+=" animateLeft"
+      listclass += " animateLeft"
     }
     return (
       <div className="App">
@@ -379,13 +383,11 @@ class App extends React.Component {
         <div className="addContactView">
           {this.renderAddContact()}
         </div>
-        <div className="mainContainer">
-          <div className={listclass}>
-            {this.renderContacts()}
-          </div>
-          <div className="contactDetailView ">
-            {this.renderViewContact()}
-          </div>
+        <div className={listclass}>
+          {this.renderContacts()}
+        </div>
+        <div className="contactDetailView ">
+          {this.renderViewContact()}
         </div>
         <div className="contactEditView">
           {this.renderEditView()}

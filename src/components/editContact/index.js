@@ -5,7 +5,7 @@ import css from './index.css';
 class ContactEditView extends React.Component {
     render() {
         const { contactFile, onChange, onPhoneChange, onSubmit, onImageChange, imagePreview } = this.props;
-        const { id, firstName, lastName, phone, email, title, province, streetAddress, zipCode, city, picture } = contactFile;
+        const { firstName, lastName, phone, email, title, province, streetAddress, zipCode, city } = contactFile;
         return (
             <div className="detailView">
                 <div className="contactContent">
