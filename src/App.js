@@ -97,7 +97,11 @@ class App extends React.Component {
       checkIfAdd = true
     }
     let contacts, isEnabled;
-    const { firstName, lastName, phone, email, title, province, streetAddress, zipCode, picture, city } = this.state;
+    const { firstName, lastName, phone, email, title, province, streetAddress, zipCode, city } = this.state;
+    let {picture} = this.state;
+    if (!picture) {
+      picture="//placehold.it/100"
+    }
     const id = uuidV1();
     if (firstName && lastName) {
       const contactFile = { id, firstName, lastName, phone, email, title, province, streetAddress, zipCode, city, picture };
